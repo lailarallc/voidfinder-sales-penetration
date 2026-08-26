@@ -377,8 +377,11 @@
 
 /* ── Narrative intro (U7) ── */
 
+/* Shared collapsible-panel column (narrative intro, glossary, why panel all
+   reuse this). Owns the content-column edge (--ll-content-measure, frame
+   v1.5.0) so the title/terms never wrap wider than the body beneath them. */
 .narrative-details {
-    max-width: 900px;
+    max-width: var(--ll-content-measure, 720px);
     margin: 0 auto;
     padding: 0 24px 32px;
 }
@@ -411,13 +414,13 @@
 }
 
 .narrative-section {
-    max-width: 900px;
     margin: 0 auto;
     padding: 16px 0 32px;
+    /* measure inherited from .narrative-details column edge */
 }
 
 .narrative-content {
-    max-width: var(--ll-body-max-width, 720px);
+    /* measure inherited from .narrative-details column edge */
 }
 
 .narrative-title {
@@ -437,7 +440,7 @@
     color: var(--ll-london-20);
     line-height: 1.6;
     margin: 0 0 12px 0;
-    max-width: var(--ll-body-max-width, 720px);
+    /* measure inherited from .narrative-details column edge */
 }
 
 .narrative-protagonist {
@@ -690,7 +693,9 @@
   font-family: 'Source Sans 3', Helvetica, Arial, sans-serif;
   font-size: 15px;
   color: #595959;
-  max-width: 560px;
+  /* Centered empty-state notice — the frame's narrow measure token (560px),
+     not a raw literal. Not part of a content column. */
+  max-width: var(--ll-body-max-width-narrow, 560px);
   margin: 10px auto 0;
 }
 
@@ -705,7 +710,7 @@
   font-size: 13px;
   line-height: 1.55;
   color: var(--ll-london-35, #595959);
-  max-width: 900px;
+  max-width: var(--ll-content-measure, 720px);
   margin: 28px 0 0;
   padding-left: 12px;
   border-left: 1px solid var(--ll-red-42, #cc100a);
@@ -719,8 +724,11 @@
   margin-right: 8px;
 }
 
+/* Hero content column: display headline + lede + action share one right edge
+   so the 44px headline never wraps wider than the lede beneath it. */
 .hero {
   padding: 14px 0 8px;
+  max-width: var(--ll-content-measure, 720px);
 }
 
 .hero-headline {
@@ -731,7 +739,7 @@
   letter-spacing: -0.02em;
   line-height: 1.15;
   margin: 0 0 16px;
-  max-width: 900px;
+  /* measure inherited from .hero column edge (was 900px, overran lede) */
 }
 
 .hero-number {
@@ -744,8 +752,8 @@
   font-size: 17px;
   color: var(--ll-london-20, #333333);
   line-height: 1.6;
-  max-width: var(--ll-body-max-width, 720px);
   margin: 0 0 16px;
+  /* measure inherited from .hero column edge */
 }
 
 .hero-action {
@@ -756,8 +764,8 @@
   font-size: 16px;
   color: var(--ll-london-20, #333333);
   line-height: 1.5;
-  max-width: var(--ll-body-max-width, 720px);
   margin: 0 0 8px;
+  /* measure inherited from .hero column edge */
 }
 
 @media (max-width: 640px) {
@@ -794,7 +802,7 @@
   color: var(--ll-london-20, #333333);
   line-height: 1.6;
   margin: 4px 0 0;
-  max-width: var(--ll-body-max-width, 720px);
+  /* measure inherited from the .narrative-details panel column edge */
 }
 
 /* The shared frame CSS never resets the UA body margin, which leaves
