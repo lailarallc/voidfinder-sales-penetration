@@ -10,7 +10,22 @@ app = dash.Dash(
     assets_folder="../assets",
     suppress_callback_exceptions=True,
     title="Void Finder — Authorized but Not Selling",
-    meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
+    meta_tags=[
+        {"name": "viewport", "content": "width=device-width, initial-scale=1"},
+        {"name": "description", "content": "Every store where an item is authorized but not scanning, each void dollarized and ranked into a broker work list."},
+        {"property": "og:title", "content": "Void Finder: Authorized but Not Selling"},
+        {"property": "og:description", "content": "Every store where an item is authorized but not scanning, each void dollarized and ranked into a broker work list."},
+        {"property": "og:type", "content": "website"},
+        {"property": "og:url", "content": "https://voidfinder.lailarallc.com/"},
+        {"property": "og:image", "content": "https://lailarallc.com/og/s/voidfinder.png"},
+        {"property": "og:image:secure_url", "content": "https://lailarallc.com/og/s/voidfinder.png"},
+        {"property": "og:image:type", "content": "image/png"},
+        {"property": "og:image:width", "content": "1200"},
+        {"property": "og:image:height", "content": "630"},
+        {"property": "og:image:alt", "content": "Void Finder: Authorized but Not Selling"},
+        {"name": "twitter:card", "content": "summary_large_image"},
+        {"name": "twitter:image", "content": "https://lailarallc.com/og/s/voidfinder.png"},
+    ],
 )
 server = app.server
 server.secret_key = os.environ.get("FLASK_SECRET_KEY", secrets.token_hex(32))
