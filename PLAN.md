@@ -172,3 +172,11 @@ the tool had no coverage, and three copy-drift errors had shipped there.
 
 **Next review due:** After the sibling-repo Critical sweep clears; consider
 rolling `review.yaml` + `describes:` out to the other 11 tools then.
+
+### 2026-09-23 — Audit (health check only)
+- **Findings:** 1 critical, 4 important, 5 nice-to-have
+- **Top concerns:** A Custom period ending before the latest week shows wrong dollars: voids are always computed as of the latest week and `apply_period` only clips by week *count*, so a void opened Nov 2025 is booked as lost in a Jan–Mar 2024 window (8 wks x $100 median -> $800 shown for Q1 2024); the trend tab likewise plots the trailing N weeks, not the custom window. CI never runs the full 126-test suite (only golden + client-mode) and Fly deploy is not gated on any test job. HANDOFF/PLAN/DECISIONS stop at 2026-07-29 and miss the Aug client-mode arc, frame/font re-vendor, and OG card; CLAUDE.md still says Dash 3.x (pinned 4.2.0).
+- **Other:** client-mode.yml error hint says `gh secret set --repo MsShawnP/<repo>` (per-repo secret, now banned) and comments say v0.2.1 while the pin is v0.2.2; `setup-flyctl@master` unpinned; ruff reports 7 lint errors (tests + analysis); `void_trend` filters to auths live at as-of, so pairs deauthorized mid-window drop out of earlier trend weeks; `ANNUAL_SALES_BASIS` comment says trailing-52-week but uses cy2025/trailing_12m ($32.3M, not the $33.2M TTM-through-12-27); loose `voidfinder-fable-brief.md` in root.
+- **Verified OK:** 126/126 tests pass locally; canonical drift gate clean; last CI runs (2026-09-05) all green incl. deploy; `.env` ignored and excluded from Docker context; client-mode HTML escapes client data.
+- **Action taken:** Audit only — no fixes this session. Manual security/code-quality/data-correctness pass replaced the automated /security-review, /ce:review, and data-science-reviewer.
+- **Next review:** 2026-12-22
