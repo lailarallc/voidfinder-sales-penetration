@@ -157,3 +157,18 @@ def test_parameter_line_states_the_reporting_period():
     assert "26w" in text or "26 week" in text, (
         "reader cannot tell which period the total covers"
     )
+
+
+def test_work_list_shows_retailer_labels_not_real_names():
+    """2026-11-05 label rule: no real partner name beside a dollar figure."""
+    wb = _load(generate_workbook(_voids(), _addresses(), "2025-12-27", PARAMS))
+    detail = wb["Broker Work List"]
+    header = [c.value for c in detail[1]]
+    retailer = [r[header.index("Retailer")] for r in detail.iter_rows(min_row=2, values_only=True)]
+    stores = [r[header.index("Store #")] for r in detail.iter_rows(min_row=2, values_only=True)]
+    assert retailer == ["Conventional grocer", "National mass retailer"]
+    assert stores == ["S0001", "S0002"]
+    for row in detail.iter_rows(values_only=True):
+        for value in row:
+            assert "Kroger" not in str(value) and "KROGER" not in str(value)
+            assert "Walmart" not in str(value) and "WALMART" not in str(value)

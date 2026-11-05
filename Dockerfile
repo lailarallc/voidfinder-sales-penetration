@@ -4,6 +4,7 @@ COPY pyproject.toml /app/
 COPY app/ /app/app/
 RUN pip install --no-cache-dir .
 COPY assets/ /app/assets/
+COPY reference/retailer_display_labels.json /app/reference/
 COPY wsgi.py /app/
 EXPOSE 8050
 # One worker: each worker holds the full ~1.3M-row scans frame, and two

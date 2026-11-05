@@ -3,7 +3,7 @@
 import pandas as pd
 from dash import Input, Output, callback, dcc, html
 
-from app import calculations, charts, data
+from app import calculations, charts, data, retailer_labels
 from app.components import data_grid, kpi_card, kpi_row, no_data_notice
 from app.filters import apply_display_filters, parse_state
 
@@ -11,8 +11,8 @@ from app.filters import apply_display_filters, parse_state
 # headers and store IDs truncate; floors keep every column readable and
 # the wrapper scrolls horizontally when the sum exceeds the container.
 _COLUMN_DEFS = [
-    {"field": "chain_name", "headerName": "Retailer", "minWidth": 110, "width": 120, "pinned": "left"},
-    {"field": "store_id", "headerName": "Store", "minWidth": 175, "width": 175},
+    {"field": "retailer", "headerName": "Retailer", "minWidth": 110, "width": 120, "pinned": "left"},
+    {"field": "store", "headerName": "Store", "minWidth": 175, "width": 175},
     {"field": "region", "headerName": "Region", "minWidth": 105, "width": 110},
     {"field": "volume_tier", "headerName": "Tier", "minWidth": 80, "width": 90},
     {"field": "sku", "headerName": "SKU", "minWidth": 115, "width": 120},
@@ -70,7 +70,7 @@ _COLUMN_DEFS = [
         ),
     },
     {
-        "field": "cluster_id",
+        "field": "cluster",
         "headerName": "Cluster",
         "minWidth": 140,
         "width": 150,
@@ -235,6 +235,12 @@ def register_callbacks():
             ls = r.get("last_scan_week")
             r["last_scan_week"] = None if ls is None or str(ls) == "NaT" else str(ls)[:10]
             r["authorized_date"] = str(r.get("authorized_date"))[:10]
+            # Display labels only: the real partner names never reach the
+            # browser (grid sort and filter then run on the label too).
+            r["retailer"] = retailer_labels.label(r.pop("chain_name", None))
+            r["cluster"] = retailer_labels.cluster_label(r.pop("cluster_id", None))
+            r["store"] = retailer_labels.store_label(r.pop("store_id", None))
+            r.pop("retailer_id", None)
 
         return (
             rows,
@@ -283,7 +289,8 @@ def _cluster_callout(shown):
         [
             html.Strong("Cluster detected: "),
             html.Span(
-                f"{top['chain']} · {top['region']} has {int(top['pairs'])} "
+                f"{retailer_labels.label(top['chain'])} · {top['region']} has "
+                f"{int(top['pairs'])} "
                 f"never-scanned voids across {int(top['stores'])} stores — "
                 f"${top['dollars']:,.0f} in opportunity. This pattern is a "
                 f"botched shelf reset, not random noise: one reset call "

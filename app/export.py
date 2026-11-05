@@ -15,7 +15,7 @@ from dash import Input, Output, callback, dcc
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
 
-from app import calculations, data
+from app import calculations, data, retailer_labels
 from app import workbook_styles as st
 from app.filters import apply_display_filters, parse_state
 
@@ -126,8 +126,8 @@ def _build_summary(ws, work, as_of, params):
 
 
 _DETAIL_COLUMNS = [
-    ("chain_name", "Retailer", 13),
-    ("store_id", "Store #", 17),
+    ("retailer_label", "Retailer", 22),
+    ("store_label", "Store #", 10),
     ("street", "Street", 26),
     ("city", "City", 16),
     ("addr_state", "State", 7),
@@ -173,6 +173,8 @@ def _build_detail(ws, work):
 
     rows = work.sort_values("void_dollars", ascending=False).copy()
     rows["void_type_label"] = rows["void_type"].map(_VOID_TYPE_LABEL)
+    rows["retailer_label"] = rows["chain_name"].astype(str).map(retailer_labels.label)
+    rows["store_label"] = rows["store_id"].map(retailer_labels.store_label)
     rows["action"] = rows.apply(_action_for, axis=1)
 
     for r_idx, (_, row) in enumerate(rows.iterrows(), start=2):

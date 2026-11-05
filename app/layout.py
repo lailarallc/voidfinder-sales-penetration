@@ -5,7 +5,7 @@ import logging
 
 from dash import Input, Output, callback, dcc, html
 
-from app import calculations, data, lailara_frame
+from app import calculations, data, lailara_frame, retailer_labels
 from app.app import app
 from app.filters import (
     DEFAULT_FILTER_STATE,
@@ -127,7 +127,7 @@ def build_hero(voids, as_of=None, period_label=None):
             .idxmax()
         )
         top = clustered[clustered["cluster_id"] == top_id]
-        chain = top["chain_name"].iloc[0]
+        chain = retailer_labels.label_lower(top["chain_name"].iloc[0])
         region = top["region"].iloc[0]
         children.append(
             html.P(
@@ -135,7 +135,7 @@ def build_hero(voids, as_of=None, period_label=None):
                     "The largest single pattern — ",
                     html.Strong(
                         f"{len(top)} never-scanned voids clustered in "
-                        f"{chain}'s {region} region "
+                        f"the {chain}'s {region} region "
                         f"(${top['void_dollars'].sum():,.0f})"
                     ),
                     " — is the signature of a botched shelf reset, not "
@@ -255,7 +255,15 @@ def register_layout():
     """Set app.layout and register all callbacks."""
     stores = data.get_stores() if data.data_available() else None
     if stores is not None and not stores.empty:
-        retailer_options = sorted(stores["chain_name"].dropna().unique())
+        # Shown as display labels, sorted by label so the real names'
+        # order does not leak; the value stays chain_name for filtering.
+        retailer_options = sorted(
+            (
+                {"label": retailer_labels.label(name), "value": name}
+                for name in stores["chain_name"].dropna().unique()
+            ),
+            key=lambda opt: opt["label"],
+        )
         region_options = sorted(stores["region"].dropna().unique())
     else:
         retailer_options = []

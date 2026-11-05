@@ -75,7 +75,11 @@ def test_hero_subhead_scopes_the_dollar_total_to_the_reporting_period():
 
 def test_hero_action_names_the_top_cluster_when_present():
     text = _text(build_hero(_voids_frame(), AS_OF))
-    assert "2 never-scanned voids clustered in Kroger's Southeast region" in text
+    assert (
+        "2 never-scanned voids clustered in the conventional grocer's "
+        "Southeast region" in text
+    )
+    assert "Kroger" not in text
     assert "($3,000)" in text
     assert "one phone call to one broker, not 4." in text
 

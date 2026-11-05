@@ -7,7 +7,7 @@ or distribution quietly decaying (went-dark).
 
 from dash import Input, Output, callback, dcc, html
 
-from app import calculations, charts, data
+from app import calculations, charts, data, retailer_labels
 from app.calculations import rollup
 from app.filters import apply_display_filters, parse_state
 
@@ -86,7 +86,10 @@ def register_callbacks():
         )
 
         by_retailer = charts.split_bars_by_type(
-            shown, "chain_name", "Void dollars by retailer and type"
+            shown.assign(
+                retailer=shown["chain_name"].astype(str).map(retailer_labels.label)
+            ),
+            "retailer", "Void dollars by retailer and type",
         )
 
         region_agg = rollup(shown, "region")
