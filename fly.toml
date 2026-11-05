@@ -5,9 +5,9 @@ primary_region = "iad"
 [http_service]
   internal_port = 8050
   force_https = true
-  auto_stop_machines = "stop"
+  auto_stop_machines = "suspend"
   auto_start_machines = true
-  min_machines_running = 1
+  min_machines_running = 0
 
 # /health is liveness-only (never touches the DB) so a database blip
 # can never take the app to an external 503. DB state lives at /ready,
