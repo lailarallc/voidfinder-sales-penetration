@@ -70,7 +70,7 @@ already documented).
 
 **What changed:** Seed ran green against a new native Windows Postgres
 (no Docker); canonical check passed; all three views verified rendering
-real voids, cluster callout correct ($164,884 Kroger·Southeast).
+real voids, cluster callout correct ($164,884 conventional grocer·Southeast).
 
 **Why:** Docker Desktop proved unrepairable (recurring broken-socket
 crashes even after the 4.80.0 update; WSL mirrored networking also
@@ -283,7 +283,7 @@ GH Actions on push) once Shawn gives the OK. That closes the arc.
 banners so each shows a nonzero never-scanned bar while Kroger stays
 dominant — then ran the full local→prod pipeline.
 
-**Why:** Never-scanned was $0 everywhere except the Kroger-SE cluster.
+**Why:** Never-scanned was $0 everywhere except the conventional grocer-SE cluster.
 Isolated new-item setup failures happen at every banner; the cluster
 should dominate, not monopolize.
 
@@ -300,8 +300,8 @@ scatter rows); scan_data left byte-identical. dbt build prod
 PASS=457/0 ERROR; fct_distribution 9,992=raw, fct_scan_data unchanged.
 verify_canonical prod OK. Restarted BOTH voidfinder (reads dist_log,
 warm min=1) and spinrate (reads fct_distribution). Verified vs prod:
-never-scanned nonzero at all 6 — Kroger $165,526 (93%), Walmart $4,946,
-Costco $3,270, Sprouts $1,820, Regional $1,460, Whole Foods $590. New
+never-scanned nonzero at all 6 — conventional grocer $165,526 (93%), national mass retailer $4,946,
+club retailer $3,270, regional natural grocer $1,820, Regional $1,460, natural grocer $590. New
 default void set 145/$323,884/128 (never-scanned 49/$177,612, +12).
 Sites 200. Proxy stopped, local 5433 intact.
 
@@ -322,7 +322,7 @@ spinrate; verified all 6 banners nonzero never-scanned. Both repos pushed
 (voidfinder 96eb1e4, platform b287881). Logged one failure + two
 decisions.
 
-**State:** Prod: never-scanned nonzero at all 6 banners (Kroger 93%
+**State:** Prod: never-scanned nonzero at all 6 banners (conventional grocer 93%
 dominant, $165,526; scatter $590-$4,946). Default void set 145/$323,884/
 128. raw+marts consistent, canonical OK, sites 200. Repos clean/pushed.
 Proxy stopped, local 5433 intact.
